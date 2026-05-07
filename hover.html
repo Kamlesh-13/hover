@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hover Card</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#f5f5f5;
+    }
+
+    .card{
+      width:280px;
+      background:#fff;
+      border:2px solid #d6b8b8;
+      border-radius:35px;
+      padding:25px 20px;
+      text-align:center;
+      transition:0.4s ease;
+      cursor:pointer;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .card:hover{
+      transform:translateY(-10px) scale(1.03);
+      box-shadow:0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .card::before{
+      position:absolute;
+      top:-100%;
+      left:0;
+      width:100%;
+      height:100%;
+      transition:0.5s;
+    }
+
+    
+
+    .card img{
+      width:170px;
+      margin-bottom:15px;
+      transition:0.4s ease;
+    }
+
+    .card:hover img{
+      transform:scale(1.08) rotate(-2deg);
+    }
+
+    .card p{
+      font-size:18px;
+      line-height:1.6;
+      color:#333;
+      margin-bottom:20px;
+    }
+
+    .card button{
+      border:none;
+      background:none;
+      font-size:28px;
+      color:#777;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .card:hover button{
+      color:#000;
+      letter-spacing:1px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <img src="C:\Users\Asus\OneDrive\Desktop\stacksprint\image\a.avif" alt="Doraemon"/>
+
+    <p>
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+      Praesentium error soluta aliquid, modi pariatur laboriosam?
+      Amet commodi neque nostrum esse quisquam?
+    </p>
+
+    <button>Click Me</button>
+  </div>
+
+</body>
+</html>
