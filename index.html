@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoicy - Premium Invoice Generator</title>
+    <meta name="description" content="Generate professional, clean, and modern invoices in seconds. Download as PDF or print.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.0/umd/lucide.min.js"></script>
+</head>
+<body>
+    <header style="background: white; border-bottom: 1px solid var(--border); padding: 1rem 2rem; margin-bottom: 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div style="background: var(--primary); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white;">
+                    <i data-lucide="file-text"></i>
+                </div>
+                <h1 style="font-size: 1.5rem; letter-spacing: -0.025em;">Invoicy</h1>
+            </div>
+            <div class="btn-section" style="display: flex; gap: 1rem;">
+                <button class="btn btn-secondary" onclick="saveToLocal()"><i data-lucide="save"></i> Save Draft</button>
+                <button class="btn btn-primary" onclick="window.print()"><i data-lucide="download"></i> Download PDF</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-container">
+        <!-- Editor Section -->
+        <section class="editor-section">
+            <div class="card" style="margin-bottom: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2>Business Details</h2>
+                    <label for="logo-upload" class="btn btn-secondary" style="margin-bottom: 0; padding: 0.5rem 1rem; font-size: 0.75rem;">
+                        <i data-lucide="image"></i> Upload Logo
+                        <input type="file" id="logo-upload" accept="image/*" style="display: none;" onchange="handleLogo(this)">
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="biz-name">Your Business Name</label>
+                    <input type="text" id="biz-name" placeholder="Acme Corp" oninput="updatePreview()">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="biz-email">Email Address</label>
+                        <input type="email" id="biz-email" placeholder="hello@acme.com" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label for="biz-address">Address</label>
+                        <input type="text" id="biz-address" placeholder="123 Silicon Valley" oninput="updatePreview()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 2rem;">
+                <h2 style="margin-bottom: 1.5rem;">Client Details</h2>
+                <div class="form-group">
+                    <label for="client-name">Client Business Name</label>
+                    <input type="text" id="client-name" placeholder="Client Co." oninput="updatePreview()">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="client-email">Client Email</label>
+                        <input type="email" id="client-email" placeholder="finance@client.com" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label for="client-address">Client Address</label>
+                        <input type="text" id="client-address" placeholder="456 Broadway Ave" oninput="updatePreview()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2>Services & Items</h2>
+                    <button class="btn btn-secondary" onclick="addItem()">
+                        <i data-lucide="plus"></i> Add Item
+                    </button>
+                </div>
+                <div id="items-container">
+                    <!-- Dynamic Items will be added here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Preview Section -->
+        <section class="preview-section">
+            <div class="invoice-preview" id="invoice">
+                <div class="preview-header">
+                    <div>
+                        <img id="p-logo" src="" alt="" style="max-height: 60px; margin-bottom: 1rem; display: none;">
+                        <div id="p-biz-name" style="font-size: 1.5rem; font-weight: 800; color: var(--primary);">Your Business</div>
+                        <div id="p-biz-email" style="color: var(--text-muted);">email@example.com</div>
+                        <div id="p-biz-address" style="color: var(--text-muted);">Address line</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <h1 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 0.5rem;">INVOICE</h1>
+                        <div style="color: var(--text-muted);">Date: <span id="p-date"></span></div>
+                        <div style="color: var(--text-muted);">Invoice #: <span id="p-inv-num">INV-001</span></div>
+                    </div>
+                </div>
+
+                <div class="preview-details">
+                    <div>
+                        <div style="text-transform: uppercase; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem;">Bill To:</div>
+                        <div id="p-client-name" style="font-size: 1.125rem; font-weight: 700;">Client Name</div>
+                        <div id="p-client-email" style="color: var(--text-muted);">client@example.com</div>
+                        <div id="p-client-address" style="color: var(--text-muted);">Client address</div>
+                    </div>
+                </div>
+
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Tax (%)</th>
+                            <th style="text-align: right;">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="preview-items">
+                        <!-- Items will be rendered here -->
+                    </tbody>
+                </table>
+
+                <div class="total-section">
+                    <div class="total-row">
+                        <span style="color: var(--text-muted);">Subtotal</span>
+                        <span id="p-subtotal">$0.00</span>
+                    </div>
+                    <div class="total-row">
+                        <span style="color: var(--text-muted);">Tax Total</span>
+                        <span id="p-tax">$0.00</span>
+                    </div>
+                    <div class="total-row grand-total">
+                        <span>Total</span>
+                        <span id="p-total">$0.00</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 4rem; border-top: 1px solid var(--border); padding-top: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+                    <p><strong>Payment Terms:</strong> Please pay within 15 days of receipt.</p>
+                    <p>Thank you for your business!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
